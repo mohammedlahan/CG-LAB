@@ -68,8 +68,7 @@ e=e+2*dy;
 glEnd();
 glFlush();
 }
-void main(int argc,char **argv)
-{
+void main(int argc,char **argv){
 data();
 glutInit(&argc,argv);
 glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
