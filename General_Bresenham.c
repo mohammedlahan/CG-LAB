@@ -1,11 +1,9 @@
 #include<stdio.h>
 #include<GL/glut.h>
-/* GLOBAL DECLARATION */
 float x1;
 float Y1;
 float x2;
 float y2;
-/* READ DATA */
 void data()
 {
 printf("Enter the first coordinate: ");
@@ -13,7 +11,6 @@ scanf("%f %f",&x1,&Y1);
 printf("Enter the second coordinate: ");
 scanf("%f %f",&x2,&y2);
 }
-/* FIND SIGN */
 int sign(float a,float b)
 {
 if((b-a)>0)
@@ -29,7 +26,6 @@ glClearColor(1.0,1.0,1.0,0.0);
 glMatrixMode(GL_PROJECTION);
 gluOrtho2D(0.0,200.0,0.0,150.0);
 }
-/* GENERAL BRESCENHAMS */
 void general()
 {
 float x,y,dx,dy,e=0.0;
@@ -76,7 +72,6 @@ e=e+2*dy;
 glEnd();
 glFlush();
 }
-/* MAIN FUNCTION */
 void main(int argc,char **argv)
 {
 data();
