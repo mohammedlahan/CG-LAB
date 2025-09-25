@@ -4,8 +4,7 @@ float x1;
 float Y1;
 float x2;
 float y2;
-void data()
-{
+void data(){
 printf("Enter the first coordinate: ");
 scanf("%f %f",&x1,&Y1);
 printf("Enter the second coordinate: ");
@@ -20,14 +19,12 @@ return (-1);
 else
 return (0);
 }
-void init()
-{
+void init(){
 glClearColor(1.0,1.0,1.0,0.0);
 glMatrixMode(GL_PROJECTION);
 gluOrtho2D(0.0,200.0,0.0,150.0);
 }
-void general()
-{
+void general(){
 float x,y,dx,dy,e=0.0;
 int s1,s2,i,temp;
 int flag=0;
@@ -40,12 +37,11 @@ dx=abs(x2-x1);
 dy=abs(y2-Y1);
 s1=sign(x1,x2);
 s2=sign(Y1,y2);
-if(dy>dx)
-{
-temp=dx;
-dx=dy;
-dy=temp;
-flag=1;
+if(dy>dx){
+       temp=dx;
+       dx=dy;
+       dy=temp;
+       flag=1;
 }
 else
 flag=0;
