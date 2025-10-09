@@ -1,117 +1,63 @@
 #include <GL/glut.h>
 #include <stdio.h>
-
 int lx1, ly1, lx2, ly2, bxmin, bymin, bxmax, bymax, rr1, rr2;
-
 void init() {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(-250.0, 250.0, -250.0, 250.0);
 }
-
 int finder(int x, int y, int xmin, int ymin, int xmax, int ymax) {
     int op = 0;
     int top = 1000, bottom = 100, left = 1, right = 10;
-
-    if (y > ymax)
-        op += 1000;
-    else if (y < ymin)
-        op += 100;
-
-    if (x > xmax)
-        op += 10;
-    else if (x < xmin)
-        op += 1;
-
+    if (y > ymax) op += 1000;
+    else if (y < ymin) op += 100;
+    if (x > xmax) op += 10;
+    else if (x < xmin) op += 1;
     return op;
 }
-
 void redraw() {
     float x1 = lx1, y1 = ly1, x2 = lx2, y2 = ly2;
     float a, b, c, d;
     float m, yr1, yrr1, xr1, xrr1, yr2, yrr2, xr2, xrr2;
-
     m = ((y2 - y1) / (x2 - x1));
-
     yr1 = y1 + (m * (bxmin - x1));
     yrr1 = y1 + (m * (bxmax - x1));
     xr1 = x1 + ((bymin - y1) / m);
     xrr1 = x1 + ((bymax - y1) / m);
-
     yr2 = y2 + (m * (bxmin - x2));
     yrr2 = y2 + (m * (bxmax - x2));
     xr2 = x2 + ((bymin - y2) / m);
     xrr2 = x2 + ((bymax - y2) / m);
-
     switch (rr1) {
         case 0: a = lx1; b = ly1; break;
         case 1: a = bxmin; b = yr1; break;
         case 10: a = bxmax; b = yrr1; break;
         case 1000: a = xrr1; b = bymax; break;
         case 100: a = xr1; b = bymin; break;
-        case 1001:
-            a = xrr1; b = yr1;
-            if (xr1 < bxmin) a = bxmin;
-            if (yr1 < bymin) b = bymin;
-            break;
-        case 1010:
-            a = xrr1; b = yrr1;
-            if (xr1 < bxmin) a = bxmin;
-            if (yr1 < bymin) b = bymin;
-            break;
-        case 101:
-            a = yr1; b = yr1;
-            if (xr1 < bxmin) a = bxmin;
-            if (yr1 < bymin) b = bymin;
-            break;
-        case 110:
-            a = yrr1; b = xr1;
-            if (xr1 < bxmin) a = bxmin;
-            if (yr1 < bymin) b = bymin;
-            break;
-        default:
-            printf("Error in switch (rr1)\n");
+        case 1001: a = xrr1; b = yr1; if (xr1 < bxmin) a = bxmin; if (yr1 < bymin) b = bymin; break;
+        case 1010: a = xrr1; b = yrr1; if (xr1 < bxmin) a = bxmin; if (yr1 < bymin) b = bymin; break;
+        case 101: a = yr1; b = yr1; if (xr1 < bxmin) a = bxmin; if (yr1 < bymin) b = bymin; break;
+        case 110: a = yrr1; b = xr1; if (xr1 < bxmin) a = bxmin; if (yr1 < bymin) b = bymin; break;
+        default: printf("Error in switch (rr1)\n");
     }
-
     switch (rr2) {
         case 0: c = lx2; d = ly2; break;
         case 1: c = bxmin; d = yr2; break;
         case 10: c = bxmax; d = yrr2; break;
         case 1000: c = xrr2; d = bymax; break;
         case 100: c = xr2; d = bymin; break;
-        case 1001:
-            c = xrr2; d = yr2;
-            if (xrr2 > bxmax) c = bxmax;
-            if (yrr2 > bymax) d = bymax;
-            break;
-        case 1010:
-            c = xrr2; d = yrr2;
-            if (xrr2 > bxmax) c = bxmax;
-            if (yrr2 > bymax) d = bymax;
-            break;
-        case 101:
-            c = yr2; d = yr2;
-            if (xrr2 > bxmax) c = bxmax;
-            if (yrr2 > bymax) d = bymax;
-            break;
-        case 110:
-            c = yrr2; d = xr2;
-            if (xrr2 > bxmax) c = bxmax;
-            if (yrr2 > bymax) d = bymax;
-            break;
-        default:
-            printf("Error in switch (rr2)\n");
+        case 1001: c = xrr2; d = yr2; if (xrr2 > bxmax) c = bxmax; if (yrr2 > bymax) d = bymax; break;
+        case 1010: c = xrr2; d = yrr2; if (xrr2 > bxmax) c = bxmax; if (yrr2 > bymax) d = bymax; break;
+        case 101: c = yr2; d = yr2; if (xrr2 > bxmax) c = bxmax; if (yrr2 > bymax) d = bymax; break;
+        case 110: c = yrr2; d = xr2; if (xrr2 > bxmax) c = bxmax; if (yrr2 > bymax) d = bymax; break;
+        default: printf("Error in switch (rr2)\n");
     }
-
-    // Draw clipped line
     glColor3f(1.0, 0.0, 1.0);
     glBegin(GL_LINES);
     glVertex2i(a, b);
     glVertex2i(c, d);
     glEnd();
     glFlush();
-
-    // Draw clipping window
     glColor3f(0.0, 1.0, 0.0);
     glBegin(GL_LINE_LOOP);
     glVertex2i(bxmin, bymin);
@@ -120,8 +66,6 @@ void redraw() {
     glVertex2i(bxmax, bymin);
     glEnd();
     glFlush();
-
-    // Draw original line segments
     glColor3f(1.0, 1.0, 0.0);
     glBegin(GL_LINES);
     glVertex2i(lx1, ly1);
@@ -131,20 +75,16 @@ void redraw() {
     glEnd();
     glFlush();
 }
-
 void equality() {
     int r1 = 0, r2 = 0, t1, t2, e = 0, t = 1;
     r1 = finder(lx1, ly1, bxmin, bymin, bxmax, bymax);
     r2 = finder(lx2, ly2, bxmin, bymin, bxmax, bymax);
     rr1 = r1; rr2 = r2;
-
     printf("\nLine is :");
-
     do {
         e = e + 1;
         t1 = r1 % 10;
         t2 = r2 % 10;
-
         if (t1 == t2 && t1 == 1 && t2 == 1) {
             switch (e) {
                 case 1: printf("Left "); t = 0; break;
@@ -157,17 +97,12 @@ void equality() {
         r1 = r1 / 10;
         r2 = r2 / 10;
     } while (e <= 4);
-
     if (t == 1) {
         printf("Inside %d\t%d\nEnter any key to continue", rr1, rr2);
-        int a;
-        scanf("%d", &a);
+        int a; scanf("%d", &a);
         redraw();
-    } else {
-        printf("| Outside\n");
-    }
+    } else printf("| Outside\n");
 }
-
 void draw() {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0, 1.0, 1.0);
@@ -176,7 +111,6 @@ void draw() {
     glVertex2i(lx2, ly2);
     glEnd();
     glFlush();
-
     glColor3f(0.0, 1.0, 0.0);
     glBegin(GL_LINE_LOOP);
     glVertex2i(bxmin, bymin);
@@ -186,17 +120,11 @@ void draw() {
     glEnd();
     glFlush();
 }
-
 void reader() {
     printf("Enter line vertices: ");
     scanf("%d%d%d%d", &lx1, &ly1, &lx2, &ly2);
-
-    bxmin = 50;
-    bymin = 50;
-    bxmax = 150;
-    bymax = 150;
+    bxmin = 50; bymin = 50; bxmax = 150; bymax = 150;
 }
-
 void main(int argc, char **argv) {
     reader();
     glutInit(&argc, argv);
